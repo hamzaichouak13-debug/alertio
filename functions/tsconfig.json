@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "lib": ["ES2020"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "firebase-admin": ["node_modules/firebase-admin"],
+      "firebase-functions": ["node_modules/firebase-functions"],
+      "firebase-functions/*": ["node_modules/firebase-functions/*"]
+    },
+    "rootDir": "..",
+    "outDir": "lib"
+  },
+  "include": [
+    "src/**/*.ts",
+    "../api/_lib/firebase.ts",
+    "../api/_lib/stores.ts",
+    "../packages/core/src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
+}

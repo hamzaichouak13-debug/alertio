@@ -1,0 +1,92 @@
+// ─────────────────────────────────────────────
+// ALERTIO — firestore.rules
+// Deploy: firebase deploy --only firestore:rules
+//
+// Principle of least privilege:
+//   - users: read/write own doc only
+//   - jobs: authenticated read, no client writes
+//   - notifications: read/write own only
+//   - scheduler_runs: no client access (admin SDK only)
+//   - matches: read own only
+// ─────────────────────────────────────────────
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ──────────────────────────────────────────────
+    function isAuthed() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthed() && request.auth.uid == uid;
+    }
+
+    function isValidUserProfile() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['uid', 'email'])
+        && data.uid == request.auth.uid
+        && data.email is string
+        && (!data.keys().hasAny(['preferences']) || data.preferences is map)
+        && (!data.keys().hasAny(['profile'])     || data.profile     is map);
+    }
+
+    function isValidNotifUpdate() {
+      // Only allow marking as read — no other field changes
+      let incoming = request.resource.data;
+      let existing = resource.data;
+      return incoming.diff(existing).affectedKeys().hasOnly(['read'])
+        && incoming.read == true;
+    }
+
+    // ── /users/{uid} ──────────────────────────────────────────────────
+    match /users/{uid} {
+      // Only the owner can read or write their own profile
+      allow read:   if isOwner(uid);
+      allow create: if isOwner(uid) && isValidUserProfile();
+      allow update: if isOwner(uid) && isValidUserProfile();
+      allow delete: if false; // never delete from client
+    }
+
+    // ── /jobs/{jobId} ─────────────────────────────────────────────────
+    match /jobs/{jobId} {
+      // Any authenticated user can read job listings
+      allow read:   if isAuthed();
+      // Only backend (Admin SDK) can write — no client writes
+      allow write:  if false;
+    }
+
+    // ── /notifications/{notifId} ──────────────────────────────────────
+    match /notifications/{notifId} {
+      // Users can only read their own notifications
+      allow read:   if isAuthed() && resource.data.userId == request.auth.uid;
+      // Users can only mark their own notifications as read
+      allow update: if isAuthed()
+        && resource.data.userId == request.auth.uid
+        && isValidNotifUpdate();
+      // Only backend (Admin SDK) can create notifications
+      allow create: if false;
+      allow delete: if false;
+    }
+
+    // ── /matches/{matchId} ────────────────────────────────────────────
+    match /matches/{matchId} {
+      allow read:  if isAuthed() && resource.data.userId == request.auth.uid;
+      allow write: if false; // Admin SDK only
+    }
+
+    // ── /scheduler_runs/{runId} ───────────────────────────────────────
+    match /scheduler_runs/{runId} {
+      // No client access — internal monitoring only
+      allow read:  if false;
+      allow write: if false;
+    }
+
+    // ── Deny everything else ──────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

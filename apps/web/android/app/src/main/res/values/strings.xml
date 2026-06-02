@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Alertio</string>
+    <string name="title_activity_main">Alertio</string>
+    <string name="package_name">io.alertio.app</string>
+    <string name="custom_url_scheme">io.alertio.app</string>
+</resources>

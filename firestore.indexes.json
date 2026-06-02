@@ -1,0 +1,77 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "jobs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "romeCode",     "order": "ASCENDING"  },
+        { "fieldPath": "datePosted",   "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "jobs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "contract",     "order": "ASCENDING"  },
+        { "fieldPath": "datePosted",   "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "jobs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "location.remote", "order": "ASCENDING"  },
+        { "fieldPath": "datePosted",      "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "jobs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "romeCode",        "order": "ASCENDING"  },
+        { "fieldPath": "contract",        "order": "ASCENDING"  },
+        { "fieldPath": "datePosted",      "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "jobs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "romeCode",        "order": "ASCENDING"  },
+        { "fieldPath": "location.remote", "order": "ASCENDING"  },
+        { "fieldPath": "datePosted",      "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "notifications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId",  "order": "ASCENDING"  },
+        { "fieldPath": "sentAt",  "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "matches",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId",      "order": "ASCENDING"  },
+        { "fieldPath": "score",       "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "scheduler_runs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status",      "order": "ASCENDING"  },
+        { "fieldPath": "startedAt",   "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": [
+    {
+      "collectionGroup": "jobs",
+      "fieldPath": "rawData",
+      "indexes": []
+    }
+  ]
+}

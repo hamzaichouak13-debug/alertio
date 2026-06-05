@@ -72,8 +72,16 @@ export function useAuth(): AuthState & AuthActions {
           createdAt: new Date(),
           updatedAt: new Date(),
         };
-        const created = await saveProfile(u.uid, blank);
-        setProfile(created);
+        try {
+          const created = await saveProfile(u.uid, blank);
+          setProfile(created);
+        } catch (saveErr: unknown) {
+          console.error("Failed to auto-create user profile:", saveErr);
+          setError("Impossible de créer le profil utilisateur.");
+        }
+      } else {
+        console.error("Failed to load user profile:", err);
+        setError("Impossible de charger le profil utilisateur.");
       }
     }
   }

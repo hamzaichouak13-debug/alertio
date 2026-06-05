@@ -25,6 +25,22 @@
 
   "routes": [
     {
+      "src": "/api/profile/(?<uid>[^/]+)",
+      "dest": "/api/profile/[uid].ts?uid=$uid",
+      "headers": {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY"
+      }
+    },
+    {
+      "src": "/api/jobs/(?<id>[^/]+)",
+      "dest": "/api/jobs/[id].ts?id=$id",
+      "headers": {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY"
+      }
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/api/$1",
       "headers": {

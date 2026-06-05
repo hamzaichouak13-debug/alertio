@@ -32,8 +32,8 @@ export default function Login() {
         await signUp(email, password);
       }
       router.replace("/dashboard");
-    } catch {
-      setLocalErr(error ?? "Une erreur est survenue");
+    } catch (err: unknown) {
+      setLocalErr((err as Error).message ?? "Une erreur est survenue");
     } finally {
       setBusy(false);
     }
@@ -45,8 +45,8 @@ export default function Login() {
     try {
       await signInWithGoogle();
       router.replace("/dashboard");
-    } catch {
-      setLocalErr(error ?? "Connexion Google échouée");
+    } catch (err: unknown) {
+      setLocalErr((err as Error).message ?? "Connexion Google échouée");
     } finally {
       setBusy(false);
     }

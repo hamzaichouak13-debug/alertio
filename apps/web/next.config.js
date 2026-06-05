@@ -45,6 +45,9 @@ const nextConfig = {
   // Environment variables exposed to the browser
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL ?? "/api",
+    NEXT_PUBLIC_USE_MOCK_API: process.env.NEXT_PUBLIC_USE_MOCK_API ?? (
+      process.env.NODE_ENV === "development" && !process.env.VERCEL ? "true" : ""
+    ),
   },
 
   // Headers: CSP + security

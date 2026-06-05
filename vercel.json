@@ -58,10 +58,6 @@
         "X-Content-Type-Options": "nosniff",
         "X-Frame-Options": "DENY"
       }
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
     }
   ]
 }

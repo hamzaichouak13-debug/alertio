@@ -2,8 +2,16 @@
 node_modules
 .npm-cache
 dist
-lib
+functions/lib/
 .env.local
 .env
 functions/.env
 .env*
+
+# Build artifacts
+apps/web/.next/
+apps/web/out/
+
+# OS
+.DS_Store
+**/.DS_Store

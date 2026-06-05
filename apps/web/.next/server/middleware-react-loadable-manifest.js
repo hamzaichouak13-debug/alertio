@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST='{"lib/api.ts -> ./api-mock":{"id":5850,"files":["static/chunks/850.8898d001acf6091b.js"]}}';

@@ -1,20 +1,15 @@
-// ─────────────────────────────────────────────
-// ALERTIO — capacitor.config.ts
-// iOS + Android mobile build config
-// ─────────────────────────────────────────────
-
 import type { CapacitorConfig } from "@capacitor/cli";
 
-const config: CapacitorConfig = {
-  appId:     "io.alertio.app",
-  appName:   "Alertio",
-  webDir:    "out",   // Next.js static export output dir
+const isDev = process.env.CAPACITOR_DEV === "true";
 
-  // Development: point to local Next.js dev server
-  // Comment out for production builds
-  server: process.env.CAPACITOR_DEV === "true"
+const config: CapacitorConfig = {
+  appId:   "io.alertio.app",
+  appName: "Alertio",
+  webDir:  "apps/web/out",  // ← chemin depuis la racine du monorepo
+
+  server: isDev
     ? {
-        url:           "http://YOUR_LOCAL_IP:3000",
+        url:           process.env.DEV_SERVER_URL ?? "http://localhost:3000",
         cleartext:     true,
         androidScheme: "http",
       }
@@ -25,14 +20,14 @@ const config: CapacitorConfig = {
       presentationOptions: ["badge", "sound", "alert"],
     },
     SplashScreen: {
-      launchShowDuration:     2000,
-      backgroundColor:        "#0E0F11",
-      showSpinner:            false,
-      androidSpinnerStyle:    "small",
-      iosSpinnerStyle:        "small",
-      spinnerColor:           "#1D9E75",
-      splashFullScreen:       true,
-      splashImmersive:        true,
+      launchShowDuration:  2000,
+      backgroundColor:     "#0E0F11",
+      showSpinner:         false,
+      androidSpinnerStyle: "small",
+      iosSpinnerStyle:     "small",
+      spinnerColor:        "#1D9E75",
+      splashFullScreen:    true,
+      splashImmersive:     true,
     },
     StatusBar: {
       style:           "DARK",
@@ -41,17 +36,14 @@ const config: CapacitorConfig = {
   },
 
   ios: {
-    contentInset: "automatic",
+    contentInset:         "automatic",
     preferredContentMode: "mobile",
-    // Required for push notifications
-    // Add the GoogleService-Info.plist to ios/App/App/
   },
 
   android: {
-    allowMixedContent:  false,
-    captureInput:       true,
-    webContentsDebuggingEnabled: process.env.NODE_ENV === "development",
-    // Add google-services.json to android/app/
+    allowMixedContent:           false,
+    captureInput:                true,
+    webContentsDebuggingEnabled: isDev,  // ← explicite
   },
 };
 

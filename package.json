@@ -1,7 +1,11 @@
 {
   "name": "alertio",
   "version": "1.0.0",
+  "dependencies": {
+    "next": "^14.2.0"
+  },
   "scripts": {
-    "build": "cd apps/web && npm install && npm run build"
+    "build": "cd apps/web && npm install && npm run build",
+    "dev": "cd apps/web && npm run dev"
   }
 }

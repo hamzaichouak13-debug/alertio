@@ -1,0 +1,7 @@
+{
+  "name": "alertio",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd apps/web && npm install && npm run build"
+  }
+}

@@ -63,12 +63,5 @@
       "src": "/(.*)",
       "dest": "/$1"
     }
-  ],
-
-  "crons": [
-    {
-      "path": "/api/cron/sync",
-      "schedule": "*/10 * * * *"
-    }
   ]
 }

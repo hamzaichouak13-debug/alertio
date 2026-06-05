@@ -2,38 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
 
-  "builds": [
-    {
-      "src": "apps/web/package.json",
-      "use": "@vercel/next"
-    },
-    {
-      "src": "api/cron/sync.ts",
-      "use": "@vercel/node",
-      "config": { "maxDuration": 60 }
-    },
-    {
-      "src": "api/jobs/[id].ts",
-      "use": "@vercel/node",
-      "config": { "maxDuration": 15 }
-    },
-    {
-      "src": "api/jobs/index.ts",
-      "use": "@vercel/node",
-      "config": { "maxDuration": 15 }
-    },
-    {
-      "src": "api/notifications/index.ts",
-      "use": "@vercel/node",
-      "config": { "maxDuration": 15 }
-    },
-    {
-      "src": "api/profile/[uid].ts",
-      "use": "@vercel/node",
-      "config": { "maxDuration": 15 }
-    }
-  ],
-
   "routes": [
     {
       "src": "/api/profile/(?<uid>[^/]+)",

@@ -13,7 +13,22 @@
       "config": { "maxDuration": 60 }
     },
     {
-      "src": "api/!(cron)/**/*.ts",
+      "src": "api/jobs/[id].ts",
+      "use": "@vercel/node",
+      "config": { "maxDuration": 15 }
+    },
+    {
+      "src": "api/jobs/index.ts",
+      "use": "@vercel/node",
+      "config": { "maxDuration": 15 }
+    },
+    {
+      "src": "api/notifications/index.ts",
+      "use": "@vercel/node",
+      "config": { "maxDuration": 15 }
+    },
+    {
+      "src": "api/profile/[uid].ts",
       "use": "@vercel/node",
       "config": { "maxDuration": 15 }
     }

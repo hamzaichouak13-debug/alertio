@@ -5,7 +5,7 @@ const isDev = process.env.CAPACITOR_DEV === "true";
 const config: CapacitorConfig = {
   appId:   "io.alertio.app",
   appName: "Alertio",
-  webDir:  "apps/web/out",  // ← chemin depuis la racine du monorepo
+  webDir:  "out",  // ← chemin depuis la racine du monorepo
 
   server: isDev
     ? {

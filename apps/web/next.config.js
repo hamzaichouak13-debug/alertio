@@ -23,13 +23,18 @@ function loadRootPublicEnv() {
   }
 }
 
+const isCapacitor = process.env.CAPACITOR_BUILD === "true";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
 
-  // Output static export for Capacitor mobile builds
-  // Switch to "export" only for mobile; keep default for Vercel web
-  output: process.env.CAPACITOR_BUILD === "true" ? "export" : undefined,
+  // Static export for Capacitor, default for Vercel
+  output: isCapacitor ? "export" : undefined,
+
+  // Relative paths for Capacitor (no HTTP server)
+  assetPrefix:   isCapacitor ? "./" : undefined,
+  trailingSlash: isCapacitor ? true : false,
 
   // Allow image optimization from external sources
   images: {
@@ -37,6 +42,8 @@ const nextConfig = {
       { protocol: "https", hostname: "**.googleapis.com" },
       { protocol: "https", hostname: "**.gstatic.com" },
     ],
+    // Required for static export
+    unoptimized: isCapacitor ? true : false,
   },
 
   // Transpile the shared core package
@@ -50,8 +57,9 @@ const nextConfig = {
     ),
   },
 
-  // Headers: CSP + security
+  // Headers: CSP + security (not applied in static export)
   async headers() {
+    if (isCapacitor) return [];
     return [
       {
         source: "/(.*)",
@@ -66,7 +74,7 @@ const nextConfig = {
 
   // Rewrites: proxy /api to Vercel functions in dev
   async rewrites() {
-    if (process.env.NODE_ENV !== "development") return [];
+    if (isCapacitor || process.env.NODE_ENV !== "development") return [];
     return [
       {
         source:      "/api/:path*",

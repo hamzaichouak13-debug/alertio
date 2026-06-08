@@ -1,49 +1,35 @@
-import type { CapacitorConfig } from "@capacitor/cli";
-
-const isDev = process.env.CAPACITOR_DEV === "true";
+import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId:   "io.alertio.app",
+  appId: "io.alertio.app",
   appName: "Alertio",
-  webDir:  "out",  // ← chemin depuis la racine du monorepo
 
-  server: isDev
-    ? {
-        url:           process.env.DEV_SERVER_URL ?? "http://localhost:3000",
-        cleartext:     true,
-        androidScheme: "http",
-      }
-    : undefined,
+  server: {
+    url: "https://alertio-prod.vercel.app",
+    cleartext: false,
+  },
 
   plugins: {
-    PushNotifications: {
-      presentationOptions: ["badge", "sound", "alert"],
-    },
     SplashScreen: {
-      launchShowDuration:  2000,
-      backgroundColor:     "#0E0F11",
-      showSpinner:         false,
-      androidSpinnerStyle: "small",
-      iosSpinnerStyle:     "small",
-      spinnerColor:        "#1D9E75",
-      splashFullScreen:    true,
-      splashImmersive:     true,
+      launchAutoHide: true,
+      launchShowDuration: 0,
     },
     StatusBar: {
-      style:           "DARK",
+      style: "DARK",
       backgroundColor: "#0E0F11",
     },
   },
 
   ios: {
-    contentInset:         "automatic",
+    contentInset: "automatic",
     preferredContentMode: "mobile",
+    webContentsDebuggingEnabled: true,
   },
 
   android: {
-    allowMixedContent:           false,
-    captureInput:                true,
-    webContentsDebuggingEnabled: isDev,  // ← explicite
+    allowMixedContent: false,
+    captureInput: true,
+    webContentsDebuggingEnabled: false,
   },
 };
 

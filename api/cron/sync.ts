@@ -20,7 +20,7 @@ const schedulerConfig = {
   fetchConfig: {
     clientId:     process.env.FRANCE_TRAVAIL_CLIENT_ID!,
     clientSecret: process.env.FRANCE_TRAVAIL_CLIENT_SECRET!,
-    maxResults:   150,
+    maxResults:   1000,
     maxAgeDays:   14,
   },
   jobStore:  createJobStore(),

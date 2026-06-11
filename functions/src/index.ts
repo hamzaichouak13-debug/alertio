@@ -23,7 +23,7 @@ function createSchedulerConfig(): SchedulerConfig {
     fetchConfig: {
       clientId,
       clientSecret,
-      maxResults: 150,
+      maxResults: 1000,
       maxAgeDays: 14,
     },
     jobStore: createJobStore(),

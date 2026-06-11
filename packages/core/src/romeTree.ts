@@ -4,6 +4,8 @@
 // Source : France Travail / data.gouv.fr
 // ─────────────────────────────────────────────
 
+import type { RomeProximity } from "./types";
+
 export interface RomeNode {
   code:         string;
   label:        string;
@@ -481,4 +483,77 @@ const ROME_NODES: RomeNode[] = [
   { code:"N4102", label:"Conduite de véhicule de transport collectif urbain",     domain:"N", subDomain:"41", relatedCodes:["N1102","N4101"], keywords:["chauffeur","bus","tramway","urbain","transport en commun"] },
 ];
 
-export { ROME_NODES };
+const INDEX = new Map<string, RomeNode>(
+  ROME_NODES.map(node => [node.code, node])
+);
+
+/**
+ * Compute proximity between a job's ROME code and the user's ROME codes.
+ * Returns the best proximity found across all user codes.
+ */
+export function computeRomeProximity(
+  jobCode: string,
+  userCodes: string[]
+): RomeProximity {
+  const job = INDEX.get(jobCode.toUpperCase());
+  if (!job) return "NONE";
+
+  let best: RomeProximity = "NONE";
+
+  for (const uc of userCodes) {
+    const user = INDEX.get(uc.toUpperCase());
+    if (!user) continue;
+
+    const proximity = getProximity(job, user);
+    if (proximityRank(proximity) > proximityRank(best)) {
+      best = proximity;
+    }
+    if (best === "EXACT") break; // can't do better
+  }
+
+  return best;
+}
+
+function getProximity(a: RomeNode, b: RomeNode): RomeProximity {
+  if (a.code === b.code)            return "EXACT";
+  if (a.subDomain === b.subDomain)  return "SAME_DOMAIN";
+  if (a.relatedCodes.includes(b.code) || b.relatedCodes.includes(a.code)) return "ADJACENT";
+  if (a.domain === b.domain)        return "ADJACENT";
+  return "NONE";
+}
+
+const PROXIMITY_RANK: Record<RomeProximity, number> = {
+  EXACT: 3, SAME_DOMAIN: 2, ADJACENT: 1, NONE: 0,
+};
+function proximityRank(p: RomeProximity): number {
+  return PROXIMITY_RANK[p];
+}
+
+/**
+ * Convert proximity to a 0–100 score.
+ */
+export function proximityToScore(proximity: RomeProximity): number {
+  switch (proximity) {
+    case "EXACT":       return 100;
+    case "SAME_DOMAIN": return 65;
+    case "ADJACENT":    return 30;
+    case "NONE":        return 0;
+  }
+}
+
+/**
+ * Expand a list of ROME codes to include adjacent/related codes.
+ * Useful for broadening a user's search automatically.
+ */
+export function expandRomeCodes(codes: string[]): string[] {
+  const expanded = new Set(codes.map(c => c.toUpperCase()));
+  for (const code of codes) {
+    const node = INDEX.get(code.toUpperCase());
+    if (node) {
+      node.relatedCodes.forEach(rc => expanded.add(rc));
+    }
+  }
+  return [...expanded];
+}
+
+export { ROME_NODES, INDEX };
